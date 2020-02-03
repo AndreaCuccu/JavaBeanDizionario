@@ -1,79 +1,28 @@
 package mieibeans;
-import java.util.*;
-import java.time.*;
-import java.sql.*;
-import java.lang.String;
 
-public class Dizionario implements java.io.Serializable{
 
-	private String testo;
+import java.io.IOException;
 
-	public Dizionario(){
-		
-	}
-	public String getParola(){
-		try{
-			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection(
-			"jdbc:mysql://remotemysql.com:3306/vlIGVKqVUg?user=vlIGVKqVUg&password=bcMVQ0ApRc");
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM Words");
-			while(rs.next()){
-				testo=rs.getString("Username") + rs.getString("Parola") + rs.getString("Significato") + rs.getString("id");
-				}
-			return testo;
-			}catch(Exception e){
-			return "non va!";
-			}
-	}
-	/*public void setParole(String val){
-		testo = val;
-	}
-	public String getSignificato(){
-			try{
-				Class.forName("com.mysql.jdbc.Driver");
-				Connection con = DriverManager.getConnection(
-				"jdbc:mysql://localhost:3306/Words?serverTimezone=UTC","vlIGVKqVUg","bcMVQ0ApRc");
-				Statement stmt = con.createStatement();
-				ResultSet rs = stmt.executeQuery("SELECT 'Significato' FROM 'Words' WHERE 1");
-				return rs.getString("Significato");
-				}catch(Exception e){
-				return e.toString();
-				}
-			}
-	public void setSignificato(String val){
-		testo = val;
-	}
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-		public String getUsername(){
-			try{
-				Class.forName("com.mysql.jdbc.Driver");
-				Connection con = DriverManager.getConnection(
-				"jdbc:mysql://localhost:3306/Words?serverTimezone=UTC","vlIGVKqVUg","bcMVQ0ApRc");
-				Statement stmt = con.createStatement();
-				ResultSet rs = stmt.executeQuery("SELECT 'Username' FROM 'Words' WHERE 1");
-				return rs.getString("Username");
-				}catch(Exception e){
-				return e.toString();
-			}
-		}
+public class Dizionario extends HttpServlet {               //classe per prendere il parametro di parola e significato.
 
-	public void setUsername(String val){
-		testo = val;
-	}
+    private static final long serialVersionUID = 1L;
 
-	public String getid(){
-		try{
-			Class.forName("com.mysql.jdbc.Driver");
-			Connection con = DriverManager.getConnection(
-			"jdbc:mysql://localhost:3306/Words?serverTimezone=UTC","vlIGVKqVUg","bcMVQ0ApRc");
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT 'id' FROM 'Words' WHERE 1");
-			return rs.getString("id");
-			}catch(Exception e){
-			return e.toString();
-		}
-	}
-	public void setid(String val){
-		testo = val;
-	*/}
+    public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {   //metodo post da importare negli altri file .java
+  
+        String parola = req.getParameter("parola");             //prendere il parametro di parola.
+        String significato = req.getParameter("significato");   //prendere il parametro di significato.
+
+        AccessBean.aggiungiParola(parola, significato);         //metodo aggiungiparola importata dalla classe accessbean.java.
+        
+        ServletContext sc = getServletContext();
+        RequestDispatcher rd = sc.getRequestDispatcher("/index.jsp");       //richiesta da inserire in index.jsp.
+        rd.forward(req,res);        
+    }
+}
