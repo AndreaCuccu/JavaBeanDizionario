@@ -18,6 +18,7 @@
         </form>
 
         <form action="Find.jsp" method="POST">
+            <input type="text" name = "parola">
             <button type="submit">Cerca</button>
         </form>
     </body>
