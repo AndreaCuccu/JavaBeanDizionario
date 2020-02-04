@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>DizionarioBeans</title>           <!--pagina iniziale del dizionario.-->
+        <title>DizionarioBeansSaulle</title>           <!--pagina iniziale del dizionario.-->
     </head>
     <body>
         <h1>Ciao, Benvenuto Cosa vuoi fare?</h1>
