@@ -50,11 +50,11 @@ public class AccessBean {
         try {
             connection = DriverManager.getConnection(databaseURL);
             Statement st = connection.createStatement(); 
-            ResultSet result = st.executeQuery("SELECT * FROM Words WHERE 'Significato'='significato' ");
+            ResultSet result = st.executeQuery("SELECT * FROM Words WHERE 'parola' = parola");
             while (result.next()) {
                 significato = result.getString("parola");
             }
-            System.out.println("return significato: " + significato);
+            System.out.println("significato: " + significato);
             return significato;
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -62,15 +62,37 @@ public class AccessBean {
         } 
     }
 
+    public static void eliminaParola(String parola){
+        try (Connection connection = DriverManager.getConnection(databaseURL)) {
+            Statement st = connection.createStatement(); 
+            String s = "DELETE 'parola' INTO Words WHERE 'parola' = parola";
+            st.execute(s);
+            System.out.println("Parola eliminata correttamente dal db");
+        } catch (SQLException ex) {
+            System.out.println("Errore nella cancellazione della parola dal db, riprova");
+            ex.printStackTrace();
+        }    
+    }
     public static void aggiungiParola(String parola, String significato){
         try (Connection connection = DriverManager.getConnection(databaseURL)) {
             Statement st = connection.createStatement(); 
             String s = "INSERT INTO Dizionario (parola, significato) VALUES ('" + parola + "','" + significato + "');";
             st.execute(s);
-            System.out.println("Parola inserita nel db");
+            System.out.println("Parola aggiunta correttamente dal db");
         } catch (SQLException ex) {
-            System.out.println("Errore nell'aggiunta della parola nel db!");
+            System.out.println("Errore nella aggiunta della parola dal db, controllare la connessione di rete e riprovare!");
             ex.printStackTrace();
         }    
+    }
+    public static void modificaParola(String parola, String significato){
+        try (Connection connection = DriverManager.getConnection(databaseURL)) {
+            Statement st = connection.createStatement(); 
+            String s = "UPDATE `Words` SET `Parola`="+parola+",`Significato` ="+significato;
+            st.execute(s);
+            System.out.println("Parola modificata correttamente dal db");
+        } catch (SQLException ex) {
+            System.out.println("Errore nella modifica della parola dal db, controllare la connessione di rete e riprovare!");
+            ex.printStackTrace();
+        }
     }
 }
